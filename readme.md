@@ -1,6 +1,6 @@
-# OSINT Tool Finder
+# Shadow-Index
 
-Aplicacao em Python para varrer repositorios publicos do GitHub relacionados a OSINT e seguranca, deduplicar os resultados e persistir os dados em MySQL.
+Shadow-Index e uma aplicacao em Python para varrer repositorios publicos do GitHub relacionados a OSINT e seguranca, deduplicar os resultados e persistir os dados em MySQL.
 
 O fluxo principal desta aplicacao e:
 
@@ -40,21 +40,21 @@ Windows PowerShell:
 
 ```powershell
 git clone <URL_DO_REPOSITORIO>
-cd osint_tool_finder
+cd shadow-index
 ```
 
 Linux:
 
 ```bash
 git clone <URL_DO_REPOSITORIO>
-cd osint_tool_finder
+cd shadow-index
 ```
 
 macOS:
 
 ```bash
 git clone <URL_DO_REPOSITORIO>
-cd osint_tool_finder
+cd shadow-index
 ```
 
 ### 2. Criar e ativar um ambiente virtual
