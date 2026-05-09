@@ -1,0 +1,16 @@
+# Core
+aiohttp>=3.9.0
+beautifulsoup4>=4.12.0
+mysql-connector-python>=8.2.0
+python-dotenv>=1.0.0
+rich>=13.7.0
+pyfiglet>=1.0.2
+loguru>=0.7.0
+
+# NLP e Similaridade
+numpy>=1.24.0
+scikit-learn>=1.4.0
+sentence-transformers>=2.2.0
+
+# Opcional, mas usado por modulos auxiliares
+lxml>=5.1.0

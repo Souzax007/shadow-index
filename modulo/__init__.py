@@ -1,0 +1,1 @@
+"""Componentes modulares da aplicacao."""
