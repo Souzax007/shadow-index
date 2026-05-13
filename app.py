@@ -68,21 +68,34 @@ def build_results_table(results: List[Dict[str, Any]]) -> Table:
 async def run_scan() -> None:
     show_banner(console)
 
-    # Conecta ao banco de dados
-    db = MySQLDatabase(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
-    db_connected = False
-    
-    if db.connect():
-        db_connected = True
-        if not db.create_tables():
-            console.print("[yellow]Aviso: Nao foi possivel criar tabelas do banco[/yellow]")
-        else:
-            console.print("[green]Banco de dados conectado e pronto[/green]")
-    else:
-        console.print("[yellow]Aviso: Nao foi possivel conectar ao banco de dados MySQL[/yellow]")
-        console.print(f"[dim]Host: {DB_HOST}, Usuario: {DB_USER}[/dim]")
-
     config = interactive_setup(console)
+
+    # Conecta ao backend de persistencia conforme escolha do menu
+    db = MySQLDatabase(
+        DB_HOST,
+        DB_USER,
+        DB_PASSWORD,
+        DB_NAME,
+        preferred_backend=config.storage_backend,
+    )
+    db_connected = False
+
+    if db.connect() and db.create_tables():
+        db_connected = True
+        if db.is_offline_mode:
+            if config.storage_backend == "local":
+                console.print(
+                    f"[yellow]Salvamento local ativado (SQLite offline):[/yellow] [bold]{db.offline_db_path}[/bold]"
+                )
+            else:
+                console.print(
+                    f"[yellow]MySQL indisponivel. Modo offline ativado em SQLite:[/yellow] [bold]{db.offline_db_path}[/bold]"
+                )
+        else:
+            console.print("[green]Banco de dados conectado e pronto (MySQL)[/green]")
+    else:
+        console.print("[red]Erro: Nao foi possivel conectar ao MySQL nem iniciar banco offline SQLite[/red]")
+        console.print(f"[dim]Host: {DB_HOST}, Usuario: {DB_USER}[/dim]")
     phrase_loader = PhraseLoader()
     await phrase_loader.warmup()
 
@@ -209,6 +222,7 @@ async def run_scan() -> None:
         summary_lines.extend([
             "",
             "[bold cyan]Banco de Dados[/bold cyan]",
+            f"Backend ativo: [bold]{db.backend_label}[/bold]",
             f"Ferramentas novas: [bold green]{stats['db_new_tools']}[/bold green]",
             f"Duplicatas detectadas: [bold yellow]{stats['db_duplicates']}[/bold yellow]",
         ])

@@ -108,6 +108,92 @@ CATEGORY_DESCRIPTIONS = {
     "automation": "Automation",
     "framework": "Security Framework",
     "tool": "General Tools",
+
+    # === MOBILE SECURITY ===
+    "android": "Android Security",
+    "ios": "iOS Security",
+    "mobile": "Mobile App Security",
+
+    # === WIRELESS & RF ===
+    "wifi": "Wi-Fi Security",
+    "bluetooth": "Bluetooth Security",
+    "rfid": "RFID / NFC Security",
+
+    # === ACTIVE DIRECTORY ===
+    "active_directory": "Active Directory",
+    "kerberos": "Kerberos Attacks",
+
+    # === CONTAINERS & DEVOPS ===
+    "docker": "Docker Security",
+    "kubernetes": "Kubernetes Security",
+    "devops": "DevSecOps",
+
+    # === FORENSICS ===
+    "forensics": "Digital Forensics",
+    "memory_forensics": "Memory Forensics",
+    "disk_analysis": "Disk Analysis",
+
+    # === LOGGING & SIEM ===
+    "siem": "SIEM Platforms",
+    "splunk": "Splunk Security",
+    "elk": "ELK Stack Security",
+
+    # === THREAT HUNTING ===
+    "threat_hunting": "Threat Hunting",
+    "yara": "YARA Rules",
+
+    # === C2 & POST EXPLOITATION ===
+    "c2": "Command and Control",
+    "post_exploitation": "Post Exploitation",
+
+    # === EVASION ===
+    "evasion": "AV / EDR Evasion",
+    "obfuscation": "Code Obfuscation",
+
+    # === BUG BOUNTY ===
+    "bug_bounty": "Bug Bounty",
+    "recon_automation": "Recon Automation",
+
+    # === OS SPECIFIC ===
+    "linux": "Linux Security",
+    "windows": "Windows Security",
+
+    # === PROGRAMMING & SCRIPTING ===
+    "python_security": "Python Security",
+    "powershell": "PowerShell Security",
+
+    # === SCANNERS & AUTOMATION ===
+    "scanner": "Security Scanners",
+    "automation_ai": "AI Security Automation",
+
+    # === DATABASE SECURITY ===
+    "database": "Database Security",
+    "mongodb": "MongoDB Security",
+    "redis": "Redis Security",
+
+    # === ICS / SCADA ===
+    "scada": "SCADA / ICS Security",
+    "iot": "IoT Security",
+
+    # === BROWSER SECURITY ===
+    "browser": "Browser Security",
+    "extension": "Browser Extensions",
+
+    # === AI / ML SECURITY ===
+    "ai_security": "AI / LLM Security",
+    "prompt_injection": "Prompt Injection",
+
+    # === BLOCKCHAIN ===
+    "blockchain": "Blockchain Security",
+    "smart_contract": "Smart Contracts",
+
+    # === LEAKS & BREACHES ===
+    "breach": "Data Breaches",
+    "credential": "Credential Attacks",
+
+    # === SEARCH ENGINES & DORKING ===
+    "google_dork": "Google Dorking",
+    "search_engine": "Search Engine OSINT",
 }
 
 
@@ -137,13 +223,20 @@ def interactive_setup(console: Console) -> SearchConfig:
     """Menu interativo principal."""
     console.print("\n[bold cyan]Menu interativo[/bold cyan]")
 
-    source_option = IntPrompt.ask(
-        "Fonte de busca (1=GitHub)",
+    source = "github"
+    console.print("[dim]Fonte de busca fixa: GitHub[/dim]")
+
+    storage_option = IntPrompt.ask(
+        "Onde deseja salvar os resultados? 1=Local (SQLite offline) | 2=MySQL",
         default=1,
-        choices=["1"],
+        choices=["1", "2"],
         show_choices=False,
     )
-    source = "github" if source_option == 1 else "github"
+    storage_backend = "local" if storage_option == 1 else "mysql"
+    if storage_backend == "local":
+        console.print("[yellow]Persistencia selecionada: Local (SQLite offline)[/yellow]")
+    else:
+        console.print("[green]Persistencia selecionada: MySQL[/green]")
 
     _print_categories(console)
     category_map, choices = _build_category_map()
@@ -158,7 +251,7 @@ def interactive_setup(console: Console) -> SearchConfig:
 
     # Pergunta se quer usar o painel interativo de palavras-chave
     use_keywords_panel = Confirm.ask(
-        "\nUsar painel interativo de palavras-chave?",
+        "\nDeseja abrir o assistente de palavras-chave (para adicionar termos extras de busca)?",
         default=False,
     )
     
@@ -174,20 +267,22 @@ def interactive_setup(console: Console) -> SearchConfig:
             extra_keywords = []
 
     topic = Prompt.ask(
-        "Topico livre opcional (enter para ignorar)",
+        "Tema adicional opcional (ex: phishing, malware, forense) - Enter para ignorar",
         default="",
     )
 
     max_pages = IntPrompt.ask(
-        "Maximo de paginas por query",
+        "Ate qual pagina cada busca pode ir (de 1 a 20; maior valor = busca mais profunda e lenta). Se voce apertar enter sem ter digitado, o valor de pagina sera 8 por padrao",
         default=8,
         choices=[str(i) for i in range(1, 21)],
         show_choices=False,
+        show_default=False,
     )
 
     page_choices_raw = Prompt.ask(
-        "Valores aleatorios de paginas por query (ex: 1,2,3)",
+        "Em cada busca, o sistema sorteia quantas paginas vai varrer. Digite as opcoes separadas por virgula (ex: 1,2,3). Se voce apertar enter sem ter digitado, sera usado 1,2,3 por padrao",
         default="1,2,3",
+        show_default=False,
     )
     page_choices = []
     for item in page_choices_raw.split(","):
@@ -200,14 +295,23 @@ def interactive_setup(console: Console) -> SearchConfig:
         page_choices = [1, 2, 3]
 
     rpm = IntPrompt.ask(
-        "Limite maximo de requisicoes por minuto",
+        "Maximo de requisicoes por minuto (menor = mais seguro contra bloqueio) [Enter = 15]",
         default=15,
         choices=[str(i) for i in range(5, 31)],
         show_choices=False,
+        show_default=False,
     )
 
-    min_delay_raw = Prompt.ask("Delay minimo entre requisicoes (segundos)", default="1.2")
-    max_delay_raw = Prompt.ask("Delay maximo entre requisicoes (segundos)", default="3.0")
+    min_delay_raw = Prompt.ask(
+        "Intervalo minimo entre requisicoes em segundos (ex: 1.2) [Enter = 1.2]",
+        default="1.2",
+        show_default=False,
+    )
+    max_delay_raw = Prompt.ask(
+        "Intervalo maximo entre requisicoes em segundos (ex: 3.0) [Enter = 3.0]",
+        default="3.0",
+        show_default=False,
+    )
 
     try:
         min_delay = float(min_delay_raw)
@@ -237,12 +341,13 @@ def interactive_setup(console: Console) -> SearchConfig:
         page_choices = [max_pages]
 
     console.print(
-        f"\n[green]Config pronta:[/green] {len(queries)} queries | fonte={source} | categoria={category}"
+        f"\n[green]Config pronta:[/green] {len(queries)} queries | fonte={source} | persistencia={storage_backend} | categoria={category}"
         + (f" | +{len(extra_keywords)} keywords extras" if extra_keywords else "")
     )
 
     return SearchConfig(
         source=source,
+        storage_backend=storage_backend,
         category=category,
         topic=topic,
         queries=queries,

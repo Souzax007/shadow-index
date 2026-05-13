@@ -1,5 +1,11 @@
 # Shadow-Index
 
+## Preview
+
+<p align="center">
+	<img src="img/image.png" alt="Preview da ferramenta" width="900">
+</p>
+
 Shadow-Index e uma aplicacao em Python para varrer repositorios publicos do GitHub relacionados a OSINT e seguranca, deduplicar os resultados e persistir os dados em MySQL.
 
 O fluxo principal desta aplicacao e:
@@ -228,22 +234,23 @@ python3 app.py
 
 Durante a execucao, a aplicacao vai pedir as configuracoes da varredura. O fluxo esperado e este:
 
-1. Fonte de busca: manter 1 para GitHub.
-2. Categoria: escolher a categoria numerica desejada.
-3. Painel interativo de palavras-chave: responder se deseja acrescentar keywords extras.
-4. Topico livre opcional: informar um tema complementar ou pressionar Enter para ignorar.
-5. Maximo de paginas por query: definir profundidade da busca.
-6. Valores aleatorios de paginas por query: informar algo como 1,2,3 ou 2,4,6.
-7. Limite maximo de requisicoes por minuto: ajustar o ritmo da coleta.
-8. Delay minimo e delay maximo: definir o intervalo entre requisicoes.
+1. Fonte de busca: fixa em GitHub (nao precisa informar).
+2. Persistencia dos dados: escolher onde salvar (1=Local SQLite offline, 2=MySQL).
+3. Categoria: escolher a categoria numerica desejada.
+4. Assistente de palavras-chave: escolher se quer abrir um painel para adicionar termos extras de busca.
+5. Tema adicional opcional: informar um contexto complementar (ex: phishing, malware, forense) ou pressionar Enter para ignorar.
+6. Ate qual pagina cada busca pode ir: valor de 1 a 20; controla a profundidade (mais alto = mais resultados e mais tempo). Se voce apertar enter sem ter digitado, o valor de pagina sera 8 por padrao.
+7. Paginas aleatorias por busca: em cada query, o sistema sorteia um valor desta lista para definir quantas paginas ira varrer (ex: 1,2,3). Se voce apertar enter sem ter digitado, sera usado 1,2,3 por padrao.
+8. Maximo de requisicoes por minuto: controla a velocidade (menor valor reduz risco de bloqueio). Se pressionar Enter, usa 15.
+9. Intervalo minimo e maximo entre requisicoes: define a pausa em segundos entre uma chamada e outra. Se pressionar Enter, usa 1.2 e 3.0.
 
 Configuracao inicial segura para primeira execucao:
 
-- Maximo de paginas por query: 5
-- Valores aleatorios de paginas por query: 1,2,3
-- Limite maximo de requisicoes por minuto: 10
-- Delay minimo: 1.2
-- Delay maximo: 3.0
+- Ate qual pagina cada busca pode ir: 5
+- Paginas aleatorias por busca: 1,2,3
+- Maximo de requisicoes por minuto: 10
+- Intervalo minimo: 1.2
+- Intervalo maximo: 3.0
 
 ### 8. Acompanhar a varredura
 
@@ -322,17 +329,19 @@ Se a conexao funcionar:
 - evita inserir registros repetidos por nome ou URL;
 - registra o resumo da execucao na tabela varreduras.
 
-Se a conexao falhar:
+Se a conexao com MySQL falhar:
 
-- a busca ainda pode acontecer;
-- os resultados nao serao gravados no MySQL;
-- voce vera um aviso no terminal informando que o banco nao foi conectado.
+- a busca continua normalmente;
+- o sistema ativa automaticamente um banco offline SQLite em offline/osint_tools.sqlite3;
+- os repositorios encontrados e o historico de varreduras continuam sendo persistidos localmente;
+- voce vera um aviso no terminal informando que o modo offline foi ativado.
 
 ## Saidas geradas
 
 - exports/osint_report.html com o relatorio da execucao.
 - Resumo no terminal com quantidade encontrada, duplicadas, erros e tempo total.
-- Registros persistidos no MySQL quando o banco estiver configurado corretamente.
+- Registros persistidos no MySQL quando disponivel.
+- Fallback automatico para SQLite em offline/osint_tools.sqlite3 quando o MySQL estiver indisponivel.
 
 ## Politica de conscientizacao e uso responsavel
 

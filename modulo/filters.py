@@ -104,12 +104,238 @@ CATEGORY_QUERIES: Dict[str, List[str]] = {
     "automation": ["automation framework", "security automation", "workflow automation"],
     "framework": ["framework", "security framework", "testing framework"],
     "tool": ["security tool", "hacking tool", "pentesting tool", "utility tool"],
+
+
+     # === MOBILE SECURITY ===
+    "android": [
+        "android pentest", "android reverse engineering", "apk analysis",
+        "android malware", "android debugging", "android exploitation"
+    ],
+    "ios": [
+        "ios pentest", "iphone exploitation", "ios jailbreak",
+        "ios reverse engineering", "swift analysis", "mobile security"
+    ],
+    "mobile": [
+        "mobile application security", "mobile pentest",
+        "mobile reverse engineering", "mobile exploitation"
+    ],
+
+    # === WIRELESS & RF ===
+    "wifi": [
+        "wifi pentest", "wireless attack", "wifi cracking",
+        "wpa attack", "wireless reconnaissance"
+    ],
+    "bluetooth": [
+        "bluetooth hacking", "bluetooth analysis",
+        "bluetooth enumeration", "ble security"
+    ],
+    "rfid": [
+        "rfid hacking", "nfc exploitation",
+        "rfid cloning", "badge cloning"
+    ],
+
+    # === ACTIVE DIRECTORY ===
+    "active_directory": [
+        "active directory enumeration", "kerberos attack",
+        "ad pentest", "bloodhound", "domain escalation"
+    ],
+    "kerberos": [
+        "kerberos exploitation", "kerberoasting",
+        "ticket attack", "golden ticket"
+    ],
+
+    # === CONTAINERS & DEVOPS ===
+    "docker": [
+        "docker security", "docker escape",
+        "container exploitation", "docker enumeration"
+    ],
+    "kubernetes": [
+        "kubernetes security", "k8s pentest",
+        "cluster enumeration", "kubernetes exploitation"
+    ],
+    "devops": [
+        "devsecops", "pipeline security",
+        "ci cd security", "github actions security"
+    ],
+
+    # === FORENSICS ===
+    "forensics": [
+        "digital forensics", "memory analysis",
+        "disk forensics", "incident response"
+    ],
+    "memory_forensics": [
+        "volatility framework", "ram analysis",
+        "memory dump analysis", "process investigation"
+    ],
+    "disk_analysis": [
+        "filesystem analysis", "disk recovery",
+        "partition analysis", "timeline analysis"
+    ],
+
+    # === LOGGING & SIEM ===
+    "siem": [
+        "siem platform", "security monitoring",
+        "event correlation", "log analysis"
+    ],
+    "splunk": [
+        "splunk security", "splunk query",
+        "splunk detection", "splunk hunting"
+    ],
+    "elk": [
+        "elk stack security", "elasticsearch security",
+        "kibana analysis", "logstash monitoring"
+    ],
+
+    # === THREAT HUNTING ===
+    "threat_hunting": [
+        "threat hunting", "ioc hunting",
+        "anomaly detection", "behavior analysis"
+    ],
+    "yara": [
+        "yara rules", "malware signatures",
+        "pattern matching", "yara detection"
+    ],
+
+    # === C2 & POST EXPLOITATION ===
+    "c2": [
+        "command and control", "c2 framework",
+        "beacon framework", "agent communication"
+    ],
+    "post_exploitation": [
+        "post exploitation", "lateral movement",
+        "credential dumping", "persistence"
+    ],
+
+    # === EVASION ===
+    "evasion": [
+        "av bypass", "edr bypass",
+        "sandbox evasion", "payload obfuscation"
+    ],
+    "obfuscation": [
+        "code obfuscation", "payload encoding",
+        "binary packing", "anti analysis"
+    ],
+
+    # === BUG BOUNTY ===
+    "bug_bounty": [
+        "bug bounty", "bug bounty automation",
+        "recon workflow", "vulnerability hunting"
+    ],
+    "recon_automation": [
+        "automated reconnaissance", "subdomain automation",
+        "osint automation", "asset discovery"
+    ],
+
+    # === OS SPECIFIC ===
+    "linux": [
+        "linux privilege escalation", "linux hardening",
+        "linux enumeration", "linux exploitation"
+    ],
+    "windows": [
+        "windows privilege escalation", "powershell exploitation",
+        "windows enumeration", "windows security"
+    ],
+
+    # === PROGRAMMING & SCRIPTING ===
+    "python_security": [
+        "python security tools", "python exploitation",
+        "security scripting", "python malware"
+    ],
+    "powershell": [
+        "powershell offensive", "powershell obfuscation",
+        "powershell empire", "windows scripting"
+    ],
+
+    # === SCANNERS & AUTOMATION ===
+    "scanner": [
+        "security scanner", "network scanner",
+        "asset scanner", "automated scanning"
+    ],
+    "automation_ai": [
+        "ai security automation", "llm security",
+        "ai pentest", "autonomous security"
+    ],
+
+    # === DATABASE SECURITY ===
+    "database": [
+        "database security", "database enumeration",
+        "db exploitation", "database audit"
+    ],
+    "mongodb": [
+        "mongodb exploitation", "mongodb enumeration",
+        "nosql injection", "mongodb security"
+    ],
+    "redis": [
+        "redis exploitation", "redis misconfiguration",
+        "redis enumeration", "redis attack"
+    ],
+
+    # === ICS / SCADA ===
+    "scada": [
+        "scada security", "industrial control systems",
+        "ics pentest", "plc exploitation"
+    ],
+    "iot": [
+        "iot security", "firmware analysis",
+        "embedded exploitation", "smart device hacking"
+    ],
+
+    # === BROWSER SECURITY ===
+    "browser": [
+        "browser exploitation", "browser fingerprinting",
+        "extension analysis", "web browser security"
+    ],
+    "extension": [
+        "chrome extension analysis", "firefox addon security",
+        "browser plugin exploitation"
+    ],
+
+    # === AI / ML SECURITY ===
+    "ai_security": [
+        "ai model security", "llm jailbreak",
+        "prompt injection", "machine learning attacks"
+    ],
+    "prompt_injection": [
+        "prompt injection", "llm exploitation",
+        "ai prompt attack", "model manipulation"
+    ],
+
+    # === BLOCKCHAIN ===
+    "blockchain": [
+        "blockchain security", "crypto wallet analysis",
+        "smart contract security", "web3 security"
+    ],
+    "smart_contract": [
+        "smart contract audit", "solidity security",
+        "ethereum exploitation", "contract vulnerability"
+    ],
+
+    # === LEAKS & BREACHES ===
+    "breach": [
+        "data breach", "credential leak",
+        "breach monitoring", "leaked database"
+    ],
+    "credential": [
+        "credential stuffing", "credential dump",
+        "password spraying", "credential analysis"
+    ],
+
+    # === SEARCH ENGINES & DORKING ===
+    "google_dork": [
+        "google dork", "search engine reconnaissance",
+        "advanced search operators", "dorking"
+    ],
+    "search_engine": [
+        "search engine osint", "internet indexing",
+        "metadata search", "file indexing"
+    ],
 }
 
 
 @dataclass
 class SearchConfig:
     source: str
+    storage_backend: str
     category: str
     topic: str
     queries: List[str]
